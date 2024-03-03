@@ -5,7 +5,11 @@ interface Props {
 }
 
 const FieldSet: FC<Props> = ({ children }) => {
-  return <div className="flex flex-col gap-2 border-b py-4">{children}</div>;
+  return (
+    <fieldset className="flex flex-col gap-2 border-b py-4">
+      {children}
+    </fieldset>
+  );
 };
 
 export default FieldSet;
