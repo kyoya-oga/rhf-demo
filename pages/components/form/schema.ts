@@ -1,9 +1,27 @@
 import * as yup from "yup";
+import type { StringSchema } from "yup";
+
+// yupのStringSchemaにkatakanaメソッドを追加するための拡張
+declare module "yup" {
+  interface StringSchema {
+    katakana(message: string): StringSchema;
+  }
+}
+
+// カタカナのバリデーションメソッドをYupに追加
+yup.addMethod<StringSchema>(yup.string, "katakana", function (message: string) {
+  return this.test("katakana", message, (value) =>
+    value ? /^[ァ-ヴー]+$/u.test(value) : true
+  );
+});
 
 export const schema = yup.object({
   surName: yup.string().required("姓は必須です"),
   firstName: yup.string().required("名は必須です"),
-  kana: yup.string().required("フリガナは必須です"),
+  kana: yup
+    .string()
+    .required("フリガナは必須です")
+    .katakana("フリガナはカタカナで入力してください"),
   gender: yup.string().required("性別を選択してください"),
   email: yup
     .string()
